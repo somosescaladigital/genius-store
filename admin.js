@@ -134,32 +134,35 @@ function setLoading(isLoading) {
 
 async function compressImage(file, maxWidth = 1200, quality = 0.7) {
     return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onerror = () => reject(new Error("Error al leer el archivo de imagen"));
-        reader.onload = (event) => {
-            const img = new Image();
-            img.src = event.target.result;
-            img.onerror = () => reject(new Error("Error al cargar la imagen para compresión"));
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.src = url;
+        
+        img.onerror = (err) => {
+            URL.revokeObjectURL(url);
+            console.error("Error cargando imagen:", err);
+            reject(new Error("No se pudo procesar la imagen seleccionada. Prueba con otra."));
+        };
+        
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
 
-                if (width > maxWidth) {
-                    height = (maxWidth / width) * height;
-                    width = maxWidth;
-                }
+            if (width > maxWidth) {
+                height = (maxWidth / width) * height;
+                width = maxWidth;
+            }
 
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
 
-                // Convertir a base64 con compresión (JPEG es mejor para fotos)
-                const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
-                resolve(compressedBase64);
-            };
+            // Convertir a base64 con compresión
+            const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+            resolve(compressedBase64);
         };
     });
 }
