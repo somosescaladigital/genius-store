@@ -1,0 +1,9 @@
+{
+    "name": "genius-store",
+    "version": "1.0.0",
+    "private": true,
+    "dependencies": {
+        "@vercel/blob": "^0.22.1",
+        "@vercel/postgres": "^0.8.0"
+    }
+}

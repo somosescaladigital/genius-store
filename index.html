@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Store - Soluciones Geniales para tu día a día</title>
+    <meta name="description"
+        content="Tu tienda online de productos variados: Electrónica, Bazar, Ropa y más. Envíos a todo el país.">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
+</head>
+
+<body>
+    <header id="header">
+        <nav class="container">
+            <div class="logo">
+                <div class="logo-circle">
+                    <span>GS</span>
+                </div>
+                <div class="logo-text">
+                    <span class="main">GENIUS STORE</span>
+                    <span class="sub">TECNOLOGÍA & MÁS</span>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#categories">Categorías</a></li>
+                <li><a href="#products">Productos</a></li>
+                <li><a href="#contact">Contacto</a></li>
+            </ul>
+            <a href="https://wa.me/5491131563172" target="_blank" class="btn-primary-small hide-mobile">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-bg">
+                <img src="images/hero_bg.png" alt="Gadget Background">
+            </div>
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <span class="badge">Novedades Semanales</span>
+                <h1>Soluciones <span class="gradient-text">Geniales</span> para tu día a día.</h1>
+                <p>Desde electrónica de punta hasta los mejores accesorios para tu hogar. Todo en un solo lugar.</p>
+                <div class="hero-btns">
+                    <a href="#products" class="btn-primary">Ver Catálogo</a>
+                    <a href="#categories" class="btn-outline">Categorías</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section id="categories" class="categories">
+            <div class="container">
+                <div class="section-header text-center">
+                    <h2 class="reveal">Explorá por <span class="gradient-text">Categorías</span></h2>
+                    <p class="reveal">Encontrá rápido lo que buscás.</p>
+                </div>
+                <div class="categories-grid">
+                    <div class="category-card reveal" data-category="electronica">
+                        <i class="fas fa-plug"></i>
+                        <h3>Electrónica</h3>
+                    </div>
+                    <div class="category-card reveal" data-category="bazar">
+                        <i class="fas fa-kitchen-set"></i>
+                        <h3>Bazar & Hogar</h3>
+                    </div>
+                    <div class="category-card reveal" data-category="gadgets">
+                        <i class="fas fa-rocket"></i>
+                        <h3>Gadgets</h3>
+                    </div>
+                    <div class="category-card reveal" data-category="ropa">
+                        <i class="fas fa-shirt"></i>
+                        <h3>Ropa & Accesorios</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="products">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="reveal">Productos <span class="gradient-text">Destacados</span></h2>
+                    <div class="filter-controls reveal">
+                        <button class="filter-btn active" data-filter="all">Todos</button>
+                        <button class="filter-btn" data-filter="electronica">Tecno</button>
+                        <button class="filter-btn" data-filter="bazar">Hogar</button>
+                        <button class="filter-btn" data-filter="gadgets">Gadgets</button>
+                    </div>
+                </div>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Trusted Section -->
+        <section class="trusted">
+            <div class="container">
+                <div class="trusted-grid">
+                    <div class="trusted-item reveal">
+                        <i class="fas fa-truck-fast"></i>
+                        <h3>Envíos a todo el país</h3>
+                        <p>Llevamos tu pedido a donde estés.</p>
+                    </div>
+                    <div class="trusted-item reveal">
+                        <i class="fas fa-shield-halved"></i>
+                        <h3>Compra Segura</h3>
+                        <p>Garantía de calidad en cada producto.</p>
+                    </div>
+                    <div class="trusted-item reveal">
+                        <i class="fas fa-headset"></i>
+                        <h3>Atención Personalizada</h3>
+                        <p>Chateá con nosotros por cualquier duda.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instagram Feed Placeholder / CTA -->
+        <section class="insta-cta">
+            <div class="container">
+                <div class="cta-card reveal">
+                    <h2>¿Querés ver más?</h2>
+                    <p>Seguinos en Instagram para no perderte los ingresos diarios y ofertas flash.</p>
+                    <a href="https://instagram.com/genius_storeok" target="_blank" class="btn-insta">
+                        <i class="fab fa-instagram"></i> @genius_storeok
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-info">
+                    <div class="logo">
+                        <div class="logo-circle"><span>GS</span></div>
+                        <span class="main">GENIUS STORE</span>
+                    </div>
+                    <p>Haciendo tu vida más fácil con productos inteligentes.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Navegación</h3>
+                    <ul>
+                        <li><a href="#home">Inicio</a></li>
+                        <li><a href="#categories">Categorías</a></li>
+                        <li><a href="#products">Catálogo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-location-dot"></i> Buenos Aires, Argentina</p>
+                    <p><i class="fab fa-whatsapp"></i> +54 9 11 0000 0000</p>
+                    <p><i class="fas fa-envelope"></i> consultas@geniusstore.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Genius Store. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5491131563172" target="_blank" class="floating-wa">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="modal-body">
+                <div class="modal-img">
+                    <img id="modalImg" src="" alt="">
+                </div>
+                <div class="modal-info">
+                    <h3 id="modalTitle"></h3>
+                    <p class="modal-price" id="modalPrice"></p>
+                    <p id="modalDesc"></p>
+                    <a id="waOrderBtn" href="#" target="_blank" class="btn-primary">
+                        <i class="fab fa-whatsapp"></i> Consultar Disponibilidad
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+
+    <script src="script.js?v=1.1"></script>
+</body>
+
+</html>
