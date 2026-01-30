@@ -27,8 +27,8 @@ productForm.addEventListener('submit', async (e) => {
     try {
         setLoading(true);
 
-        // Convert image to base64 for submittal
-        const base64 = await toBase64(imageFile);
+        // Comprimir imagen antes de subir para evitar límites de Vercel (4.5MB)
+        const base64 = await compressImage(imageFile);
 
         const response = await fetch('/api/products', {
             method: 'POST',
@@ -45,8 +45,15 @@ productForm.addEventListener('submit', async (e) => {
         });
 
         if (!response.ok) {
-            const err = await response.json();
-            throw new Error(err.error || "Error al subir");
+            let errorMsg = "Error al subir";
+            try {
+                const err = await response.json();
+                errorMsg = err.error || errorMsg;
+            } catch (e) {
+                // Si no es JSON, capturamos el texto del error
+                errorMsg = await response.text();
+            }
+            throw new Error(errorMsg);
         }
 
         alert("¡Producto guardado con éxito!");
@@ -55,7 +62,11 @@ productForm.addEventListener('submit', async (e) => {
 
     } catch (error) {
         console.error("Error al guardar:", error);
-        alert("Hubo un error: " + error.message);
+        // Mostrar error más descriptivo si es por tamaño
+        const msg = error.message.includes("Payload Too Large") 
+            ? "La imagen es demasiado pesada incluso comprimida. Prueba con otra."
+            : error.message;
+        alert("Hubo un error: " + msg);
     } finally {
         setLoading(false);
     }
@@ -121,11 +132,32 @@ function setLoading(isLoading) {
     }
 }
 
-function toBase64(file) {
-    return new Promise((resolve, reject) => {
+async function compressImage(file, maxWidth = 1200, quality = 0.7) {
+    return new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth) {
+                    height = (maxWidth / width) * height;
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Convertir a base64 con compresión (JPEG es mejor para fotos)
+                const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                resolve(compressedBase64);
+            };
+        };
     });
 }
