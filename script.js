@@ -55,7 +55,7 @@ function renderProducts(filter = 'all') {
             <div class="product-info">
                 <span class="product-category">${product.category}</span>
                 <h3>${product.name}</h3>
-                <p class="product-price">${product.price}</p>
+                <p class="product-price">$${product.price}</p>
                 <button class="product-btn" onclick="openProductModal('${product.id}')">Ver Detalles</button>
             </div>
         </div>
@@ -70,12 +70,12 @@ function renderProducts(filter = 'all') {
 
 // Modal Logic
 window.openProductModal = (id) => {
-    const product = products.find(p => p.id === id);
+    const product = products.find(p => p.id == id);
     if (!product) return;
 
     document.getElementById('modalImg').src = product.image;
     document.getElementById('modalTitle').textContent = product.name;
-    document.getElementById('modalPrice').textContent = product.price;
+    document.getElementById('modalPrice').textContent = '$' + product.price;
     document.getElementById('modalDesc').textContent = product.description;
     
     // WhatsApp prefilled message

@@ -1,3 +1,4 @@
+const adminContent = document.getElementById('adminContent');
 // In Vercel, we check for presence of products (assuming DB is ready if we can fetch)
 adminContent.style.display = 'block';
 loadAdminProducts();
@@ -80,7 +81,7 @@ async function loadAdminProducts() {
                 <img src="${p.image}" alt="${p.name}">
                 <div class="info">
                     <h4>${p.name}</h4>
-                    <span>${p.category} | ${p.price}</span>
+                    <span>${p.category} | $${p.price}</span>
                 </div>
                 <button class="delete-btn" onclick="deleteProduct('${p.id}')">
                     <i class="fas fa-trash"></i>
