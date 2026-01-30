@@ -45,13 +45,13 @@ productForm.addEventListener('submit', async (e) => {
         });
 
         if (!response.ok) {
-            let errorMsg = "Error al subir";
+            const body = await response.text();
+            let errorMsg = body || "Error desconocido en el servidor";
             try {
-                const err = await response.json();
-                errorMsg = err.error || errorMsg;
+                const json = JSON.parse(body);
+                errorMsg = json.error || errorMsg;
             } catch (e) {
-                // Si no es JSON, capturamos el texto del error
-                errorMsg = await response.text();
+                // No es JSON, mantenemos el texto original
             }
             throw new Error(errorMsg);
         }
@@ -133,12 +133,14 @@ function setLoading(isLoading) {
 }
 
 async function compressImage(file, maxWidth = 1200, quality = 0.7) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
+        reader.onerror = () => reject(new Error("Error al leer el archivo de imagen"));
         reader.onload = (event) => {
             const img = new Image();
             img.src = event.target.result;
+            img.onerror = () => reject(new Error("Error al cargar la imagen para compresión"));
             img.onload = () => {
                 const canvas = document.createElement('canvas');
                 let width = img.width;
