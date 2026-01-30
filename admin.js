@@ -1,9 +1,5 @@
-const adminContent = document.getElementById('adminContent');
-const configMessage = document.getElementById('configMessage');
-
 // In Vercel, we check for presence of products (assuming DB is ready if we can fetch)
 adminContent.style.display = 'block';
-configMessage.style.display = 'none';
 loadAdminProducts();
 
 const productForm = document.getElementById('productForm');

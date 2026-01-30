@@ -33,8 +33,13 @@ export default async function handler(req, res) {
 
     // 1. GET - Obtener todos los productos
     if (req.method === 'GET') {
-      const { rows } = await sql`SELECT * FROM products ORDER BY created_at DESC`;
-      return res.status(200).json(rows);
+      try {
+        const { rows } = await sql`SELECT * FROM products ORDER BY created_at DESC`;
+        return res.status(200).json(rows);
+      } catch (dbError) {
+        console.error('Error al obtener productos:', dbError);
+        return res.status(500).json({ error: 'Error al conectar con la base de datos: ' + dbError.message });
+      }
     }
 
     // 2. POST - Crear producto (subir imagen + guardar en DB)
@@ -45,35 +50,61 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Falta la imagen' });
       }
 
-      // Subir a Vercel Blob
-      // Convertimos base64 a Buffer (usando el global de Node.js)
-      const bufferData = Buffer.from(imageBase64.split(',')[1], 'base64');
-      const blob = await put(`products/${Date.now()}-${imageName}`, bufferData, {
-        access: 'public',
-        contentType: 'image/png' 
-      });
+      // Validar variables de entorno obligatorias
+      if (!process.env.BLOB_READ_WRITE_TOKEN) {
+        return res.status(500).json({ error: 'Configuración faltante: BLOB_READ_WRITE_TOKEN no definida en Vercel' });
+      }
 
-      // Guardar en Postgres
-      const result = await sql`
-        INSERT INTO products (name, category, price, description, badge, image)
-        VALUES (${name}, ${category}, ${price}, ${description}, ${badge}, ${blob.url})
-        RETURNING *
-      `;
+      try {
+        // Subir a Vercel Blob
+        // Convertimos base64 a Buffer (usando el global de Node.js)
+        const base64Data = imageBase64.split(',')[1];
+        if (!base64Data) {
+          throw new Error('Formato de imagen Base64 inválido');
+        }
+        
+        const bufferData = Buffer.from(base64Data, 'base64');
+        const blob = await put(`products/${Date.now()}-${imageName || 'image.png'}`, bufferData, {
+          access: 'public',
+          contentType: 'image/png' 
+        });
 
-      return res.status(201).json(result.rows[0]);
+        // Guardar en Postgres
+        const result = await sql`
+          INSERT INTO products (name, category, price, description, badge, image)
+          VALUES (${name}, ${category}, ${price}, ${description}, ${badge}, ${blob.url})
+          RETURNING *
+        `;
+
+        return res.status(201).json(result.rows[0]);
+      } catch (uploadError) {
+        console.error('Error en carga/DB:', uploadError);
+        return res.status(500).json({ error: 'Error al procesar la carga: ' + uploadError.message });
+      }
     }
 
     // 3. DELETE - Eliminar producto
     if (req.method === 'DELETE') {
       const { id } = req.query;
-      await sql`DELETE FROM products WHERE id = ${id}`;
-      return res.status(200).json({ success: true });
+      if (!id) return res.status(400).json({ error: 'ID de producto requerido' });
+      
+      try {
+        await sql`DELETE FROM products WHERE id = ${id}`;
+        return res.status(200).json({ success: true });
+      } catch (deleteError) {
+        console.error('Error al eliminar:', deleteError);
+        return res.status(500).json({ error: 'Error al eliminar el producto: ' + deleteError.message });
+      }
     }
 
     return res.status(405).json({ error: 'Método no permitido' });
 
   } catch (error) {
-    console.error('Error en API:', error);
-    return res.status(500).json({ error: error.message });
+    console.error('Error general en API:', error);
+    return res.status(500).json({ 
+      error: 'Error interno del servidor',
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 }
