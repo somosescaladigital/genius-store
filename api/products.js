@@ -17,6 +17,20 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Auto-creación de la tabla si no existe
+    await sql`
+      CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        category TEXT NOT NULL,
+        price TEXT NOT NULL,
+        description TEXT,
+        badge TEXT,
+        image TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+
     // 1. GET - Obtener todos los productos
     if (req.method === 'GET') {
       const { rows } = await sql`SELECT * FROM products ORDER BY created_at DESC`;
